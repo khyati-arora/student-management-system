@@ -25,7 +25,7 @@ def test_get_student(client,user):
 
 @pytest.mark.django_db
 def test_post_student(client,user):
-    ENDPOINT = 'http://127.0.0.1:8000/api/custom_student'
+    ENDPOINT = 'http://127.0.0.1:8000/api/create_student'
     client.force_authenticate(user=user)
 
     payload = {

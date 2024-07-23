@@ -27,7 +27,7 @@ def test_get_result(client,user):
     assert len(response_data) == 1
 
 def test_add_result(client,user):
-    ENDPOINT = 'http://127.0.0.1:8000/api/custom_result'
+    ENDPOINT = 'http://127.0.0.1:8000/api/create_result'
     client.force_authenticate(user=user)
     user_student = CustomUser.objects.create(username = 'student@gmail.com',password='student',user_type = '2')
     student = Students.objects.create(basic_details = user_student, guardian = 'parent')

@@ -25,7 +25,7 @@ def test_get_staff(client,user):
 
 @pytest.mark.django_db  
 def test_add_staff(client,user):
-     ENDPOINT = 'http://127.0.0.1:8000/api/custom_staff' 
+     ENDPOINT = 'http://127.0.0.1:8000/api/create_staff' 
      client.force_authenticate(user=user)
      course = Course.objects.create(course_name = "c")
      payload = {
