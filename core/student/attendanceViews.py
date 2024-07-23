@@ -52,6 +52,7 @@ def get_attendance(request, course_id, student_id):
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated, StaffOrAdminUser])
 def update_attendance(request, course_id, student_id):
+    print('update called')
     try:
         attendance = Attendance.objects.get(course_id=course_id, student_id=student_id, date=timezone.now().date())
     except ObjectDoesNotExist:
@@ -72,12 +73,12 @@ def update_attendance(request, course_id, student_id):
 @permission_classes([IsAuthenticated, StaffOrAdminUser])
 def delete_attendance(request, course_id, student_id):
     try:
-        attendance = Attendance.objects.get(course_id=course_id, student_id=student_id, date=request.data['date'])
+        attendance = Attendance.objects.get(course_id=course_id, student_id=student_id)
     except ObjectDoesNotExist:
         return Response({'error': 'Attendance record not found.'}, status=status.HTTP_404_NOT_FOUND)
 
     try:
         attendance.delete()
-        return Response("Deleted successfully")
+        return Response("Deleted successfully",status=status.HTTP_204_NO_CONTENT)
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
