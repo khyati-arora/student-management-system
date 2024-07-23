@@ -10,6 +10,10 @@ from django.core.exceptions import ObjectDoesNotExist
 @api_view(['POST'])
 @permission_classes([IsAuthenticated, AdminUser])
 def create_course(request):
+    data = request.data
+    if not isinstance(data.get('course_name'), str):
+        return Response({'course_name': ['Course name must be a string.']}, status=status.HTTP_400_BAD_REQUEST)
+    
     serializer = CourseSerializer(data=request.data)
     if serializer.is_valid():
         try:
@@ -60,9 +64,14 @@ def course_update(request, course_id):
         course = Course.objects.get(id=course_id)
         data = request.data
         if 'course_name' in data:
+            if not isinstance(data.get('course_name'), str):
+                return Response({'course_name': ['Course name must be a string.']}, status=status.HTTP_400_BAD_REQUEST)
             course.course_name = data['course_name']
-        course.save()
-        return Response({"message": "Updated successfully"}, status=status.HTTP_200_OK)
+ 
+            course.save()
+            return Response({"message": "Updated successfully"}, status=status.HTTP_200_OK)
+        else : 
+            return Response({"message": "Missing field course_name"}, status=status.HTTP_400_BAD_REQUEST)
     except ObjectDoesNotExist:
         return Response({'error': 'Course not found.'}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:

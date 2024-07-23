@@ -45,12 +45,14 @@ class StaffGetSerializer(serializers.ModelSerializer):
         fields = ['id', 'basic_details', 'course_id', "salary"]
 
 class CourseSerializer(serializers.ModelSerializer):
-
+    
     class Meta:
         model = Course
         fields = ['course_name']
 
 class CourseGetSerializer(serializers.ModelSerializer):
+
+    course_name = serializers.CharField(max_length=255)
 
     class Meta:
         model = Course

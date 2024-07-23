@@ -6,9 +6,15 @@ from .models import CustomUser
 from rest_framework.permissions import IsAuthenticated
 from .permissions import AdminUser
 
+def allFieldsCheck(data):
+   return all(isinstance(value, str) for value in data.values()) 
+
 @permission_classes([IsAuthenticated,AdminUser])
 @api_view(['POST'])
 def create_admin(request):
+    data = request.data
+    if allFieldsCheck(data)==False:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
     serializer = CustomUserSerializer(data=request.data)
     if serializer.is_valid():
          serializer.save()
@@ -34,6 +40,8 @@ def update_admin(request,username):
         data = request.data
         if 'address' in data :
             admin.address = data['address']
+        else:
+            return Response({'message' : 'Data not found'}, status=status.HTTP_400_BAD_REQUEST)    
         admin.save()
         return Response("Update successful")
      except Exception as e:

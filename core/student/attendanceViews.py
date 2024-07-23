@@ -13,14 +13,16 @@ from .permissions import StaffOrAdminUser
 @api_view(['POST'])
 @permission_classes([IsAuthenticated, StaffOrAdminUser])
 def create_attendance(request):
-    serializer = AttendanceSerializer(data=request.data)
-    if serializer.is_valid():
-        try:
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+  
+        serializer = AttendanceSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            try:
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            except Exception as e:
+                return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+   
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -59,8 +61,12 @@ def update_attendance(request, course_id, student_id):
         return Response({'error': 'Attendance record not found.'}, status=status.HTTP_404_NOT_FOUND)
 
     data = request.data
+    if not isinstance(data.get('status'), str):
+                return Response({'message': ['Status must be a string.']}, status=status.HTTP_400_BAD_REQUEST)
     if 'status' in data:
         attendance.status = data['status']
+    else :
+        return Response({'message' : 'Data not sent'} , status=status.HTTP_400_BAD_REQUEST)    
 
     try:
         attendance.save()

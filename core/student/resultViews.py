@@ -69,7 +69,8 @@ def update_result(request, course_id, student_id):
 
         if 'grade' in data:
             result.grade = data['grade']
-
+        else :
+            return Response({'message' : 'Data not found'}, status=status.HTTP_400_BAD_REQUEST)
         result.save()
         return Response({'message': 'Updated successfully'}, status=status.HTTP_200_OK)
     
@@ -83,7 +84,7 @@ def update_result(request, course_id, student_id):
 @permission_classes([IsAuthenticated, StaffOrAdminUser])
 def delete_result(request, course_id, student_id):
     try:
-
+        
         try:
             course = Course.objects.get(id=course_id)
         except Course.DoesNotExist:
