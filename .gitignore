@@ -1,0 +1,54 @@
+# Python
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.py[cod]
+
+# Django
+*.log
+db.sqlite3
+staticfiles/
+media/
+*.pot
+*.mo
+*.pyc
+*.pyo
+*.pyd
+
+# Environment files
+.env
+*.env
+
+# Virtual environment
+venv/
+.env/
+*.env/
+
+# IDEs and editors
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Local Django settings
+local_settings.py
+
+# MySQL specific
+*.myd
+*.myi
+
+# Test coverage
+*.pytest_cache
+.coverage
+coverage.xml
+*.cover
+*.py,cover
+
+# Other
+*.swp
+*~
