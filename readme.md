@@ -28,7 +28,7 @@ Courses :
 1. Add course
 2. Update course
 3. Get all courses
-4. Delte course
+4. Delete course
 
 Attendance :
 1. View attendance of a student enrolled in a course
@@ -228,6 +228,14 @@ To run tests :
 ```
 pytest
 ```
+To check coverage : 
+'
+
+```
+coverage run -m pytest
+coverage report
+```
+
 
 
 
