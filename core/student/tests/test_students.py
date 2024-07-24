@@ -1,6 +1,6 @@
 from rest_framework.test import APIClient;
 import pytest;  
-from .models import CustomUser, Students
+from ..models import CustomUser, Students
 
 @pytest.fixture
 def client():

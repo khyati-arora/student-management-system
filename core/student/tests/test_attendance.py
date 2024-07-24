@@ -1,6 +1,6 @@
 from rest_framework.test import APIClient;
 import pytest;  
-from .models import CustomUser, Course, Students, Attendance
+from ..models import CustomUser, Course, Students, Attendance
 from django.utils import timezone
 
 @pytest.fixture
