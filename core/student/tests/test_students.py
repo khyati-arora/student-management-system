@@ -1,6 +1,6 @@
 from rest_framework.test import APIClient;
 import pytest;  
-from ..models import CustomUser, Students
+from student.models import CustomUser, Students
 
 @pytest.fixture
 def client():
@@ -107,7 +107,6 @@ def test_update_student_missing_payload(client,user):
        
     }
     response = client.put(ENDPOINT,data=payload,format = 'json')
-    response_data = response.json()
     assert response.status_code == 400
     
 
