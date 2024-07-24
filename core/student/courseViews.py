@@ -47,7 +47,7 @@ def get_course(request,course_id):
 @permission_classes([IsAuthenticated, AdminUser])
 
 def course_delete(request, course_id):
-    print('delete called')
+   
     try:
         course = Course.objects.get(id=course_id)
         course.delete()

@@ -42,10 +42,49 @@ def test_add_staff(client,user):
      }  
      response = client.post(ENDPOINT,data=payload,format='json')
      response_data = response.json()
-     print(response_data)
      assert response.status_code == 201
      assert response_data['course'] == course.id
 
+@pytest.mark.django_db  
+def test_add_staff_missing_fields(client,user):
+     ENDPOINT = 'http://127.0.0.1:8000/api/create_staff' 
+     client.force_authenticate(user=user)
+     course = Course.objects.create(course_name = "c")
+     payload = {
+        "basic_details" : {
+            "password" : "Khyati",
+            "user_type" : "1",
+            "address" : "354",
+            "gender" : "Female",
+            "name" : "Khyati"
+            
+        },
+        "course" : course.id,
+        "salary" : "30000"
+     }  
+     response = client.post(ENDPOINT,data=payload,format='json')
+     assert response.status_code == 400
+
+@pytest.mark.django_db  
+def test_add_staff_missing_fields(client,user):
+     ENDPOINT = 'http://127.0.0.1:8000/api/create_staff' 
+     client.force_authenticate(user=user)
+     course = Course.objects.create(course_name = "c")
+     payload = {
+        "basic_details" : {
+            "password" : "Khyati",
+            "user_type" : "1",
+            "address" : 354,
+            "gender" : "Female",
+            "name" : "Khyati"
+            
+        },
+        "course" : course.id,
+        "salary" : "30000"
+     }  
+     response = client.post(ENDPOINT,data=payload,format='json')
+     assert response.status_code == 400     
+         
 @pytest.mark.django_db  
 def test_update_staff(client,user):
     client.force_authenticate(user=user)
@@ -55,13 +94,46 @@ def test_update_staff(client,user):
     course1 = Course.objects.create(course_name = "Jdk")
     ENDPOINT = f'http://127.0.0.1:8000/api/update_staff/{staff.id}' 
     payload = {
-        "course" : course1.id,
+        "salary" : "50000"
     }
 
     response = client.put(ENDPOINT,data=payload,format = 'json')
     response_data = response.json()
     assert response.status_code == 200
     assert response_data['message'] == 'Updated successfully' 
+
+@pytest.mark.django_db  
+def test_update_staff_invalid(client,user):
+    client.force_authenticate(user=user)
+    course = Course.objects.create(course_name = "c")
+    user_staff = CustomUser.objects.create(username = 'staff@gmail.com',password='staff',user_type = '1')
+    staff = Staffs.objects.create(basic_details = user_staff, course = course)
+    course1 = Course.objects.create(course_name = "Jdk")
+    ENDPOINT = f'http://127.0.0.1:8000/api/update_staff/{staff.id}' 
+    payload = {
+       
+    }
+
+    response = client.put(ENDPOINT,data=payload,format = 'json')
+    response_data = response.json()
+    assert response.status_code == 400
+  
+@pytest.mark.django_db  
+def test_update_staff_invalid_type(client,user):
+    client.force_authenticate(user=user)
+    course = Course.objects.create(course_name = "c")
+    user_staff = CustomUser.objects.create(username = 'staff@gmail.com',password='staff',user_type = '1')
+    staff = Staffs.objects.create(basic_details = user_staff, course = course)
+    course1 = Course.objects.create(course_name = "Jdk")
+    ENDPOINT = f'http://127.0.0.1:8000/api/update_staff/{staff.id}' 
+    payload = {
+        "salary" : 50000
+    }
+
+    response = client.put(ENDPOINT,data=payload,format = 'json')
+
+    assert response.status_code == 400
+    
 
 def test_delete_student(client,user):
     client.force_authenticate(user=user)

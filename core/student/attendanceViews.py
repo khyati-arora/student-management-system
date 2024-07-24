@@ -54,7 +54,7 @@ def get_attendance(request, course_id, student_id):
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated, StaffOrAdminUser])
 def update_attendance(request, course_id, student_id):
-    print('update called')
+    
     try:
         attendance = Attendance.objects.get(course_id=course_id, student_id=student_id, date=timezone.now().date())
     except ObjectDoesNotExist:

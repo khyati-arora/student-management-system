@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import CustomUser, Staffs, Students, Course, Results, Attendance
 
+
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
@@ -17,6 +18,13 @@ class CustomUserSerializer(serializers.ModelSerializer):
             
         )
         return user
+    
+class CustomUserGetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['id','username', 'password', 'user_type','address','gender','name']
+    
+     
     
 class StaffSerializer(serializers.ModelSerializer):
     class Meta:

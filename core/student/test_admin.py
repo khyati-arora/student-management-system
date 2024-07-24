@@ -57,8 +57,7 @@ def test_create_admin_again(client,user):
     }
     response = client.post(ENDPOINT,data=payload,format='json')
     response1 = client.post(ENDPOINT,data=payload,format='json')
-    response1_data = response1.json() 
-    print(response1.status_code)
+    
     assert response1.status_code == 400
       
 @pytest.mark.django_db

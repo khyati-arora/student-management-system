@@ -16,12 +16,23 @@ def getUserID(username):
     except CustomUser.DoesNotExist:
         return None
 
+def validateUser(data):    
+   return all(isinstance(value, str) for value in data.values()) 
+
+def validateStudent(data):
+   return type(data) == str
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated, StaffOrAdminUser])
 def create_student(request):
     if request.method == 'POST':
+        data = request.data
+        print(data)
+        if validateUser(data['basic_details']) == False or validateStudent(data['guardian']) == False:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         try:
             admin_data = request.data.pop('basic_details')
+            
             user_serializer = CustomUserSerializer(data=admin_data)
             
             if user_serializer.is_valid():
@@ -33,8 +44,11 @@ def create_student(request):
                     if serializer.is_valid():
                         serializer.save()
                         return Response(serializer.data, status=status.HTTP_201_CREATED)
-                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-            return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                    else:
+                        admin_user.delete()
+                        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            else :        
+                return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -79,16 +93,20 @@ def update_student(request, student_id):
         student = Students.objects.get(id=student_id)
         custom_user = student.basic_details
         data = request.data
-        
+        flag = False
         if 'username' in data:
             custom_user.username = data['username']
+            flag = True
 
         if 'address' in data:
             custom_user.address = data['address']
-
+            flag = True
         if 'guardian' in data:
             student.guardian = data['guardian']
+            flag = True
         
+        if(flag == False):
+            return Response({'message' : 'payload missing'},status=status.HTTP_400_BAD_REQUEST)
         custom_user.save()
         student.save()
         return Response({'message': 'Updated successfully'}, status=status.HTTP_200_OK)

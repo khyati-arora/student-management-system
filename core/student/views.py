@@ -1,7 +1,7 @@
 from rest_framework import status
 from rest_framework.decorators import api_view,permission_classes
 from rest_framework.response import Response
-from .serializers import CustomUserSerializer
+from .serializers import CustomUserSerializer, CustomUserGetSerializer
 from .models import CustomUser
 from rest_framework.permissions import IsAuthenticated
 from .permissions import AdminUser
@@ -27,7 +27,7 @@ def create_admin(request):
 def get_admin(request):
     try:
      admin = CustomUser.objects.filter(user_type='3')
-     serializer = CustomUserSerializer(admin, many=True)
+     serializer = CustomUserGetSerializer(admin, many=True)
      return Response(serializer.data, status=status.HTTP_200_OK)
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

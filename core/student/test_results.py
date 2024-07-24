@@ -20,7 +20,6 @@ def test_get_result(client,user):
     Results.objects.create(student = student,course=course,grade = 'A+')
     response = client.get(ENDPOINT)
     response_data = response.json()
-    print(response_data)
     assert response.status_code == 200
     assert len(response_data) == 1
 
@@ -39,7 +38,6 @@ def test_add_result(client,user):
 
     response = client.post(ENDPOINT,data=payload,format='json')
     response_data = response.json()
-    print(response_data)
     assert response.status_code == 201
     assert response_data['grade'] == 'B+' 
 
@@ -58,7 +56,6 @@ def test_add_result_invalid_field(client,user):
 
     response = client.post(ENDPOINT,data=payload,format='json')
     response_data = response.json()
-    print(response_data)
     assert response.status_code == 400
 
 def test_add_result_invalid_field_course_id(client,user):
@@ -75,8 +72,6 @@ def test_add_result_invalid_field_course_id(client,user):
     }
 
     response = client.post(ENDPOINT,data=payload,format='json')
-    response_data = response.json()
-    print(response_data)
     assert response.status_code == 400   
 
 def test_add_result_missing_field(client,user):
@@ -93,7 +88,6 @@ def test_add_result_missing_field(client,user):
 
     response = client.post(ENDPOINT,data=payload,format='json')
     response_data = response.json()
-    print(response_data)
     assert response.status_code == 400      
 
 def test_update_result(client,user):   

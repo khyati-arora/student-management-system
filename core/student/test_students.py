@@ -44,6 +44,43 @@ def test_post_student(client,user):
     assert response.status_code == 201
     assert response_data['guardian'] == 'Sat Pal'
 
+@pytest.mark.django_db
+def test_post_student_missing_fields(client,user):
+    ENDPOINT = 'http://127.0.0.1:8000/api/create_student'
+    client.force_authenticate(user=user)
+
+    payload = {
+        'basic_details' : {
+            'password' : 'student',
+            "user_type" : "2",
+            "address" : "354",
+            "gender" : "Female",
+            "name" : "Khyati"
+        },
+        "guardian" : "Sat Pal"
+    }
+    response = client.post(ENDPOINT,data=payload,format='json')
+    assert response.status_code == 400
+    
+@pytest.mark.django_db
+def test_post_student_invalid_input(client,user):
+    ENDPOINT = 'http://127.0.0.1:8000/api/create_student'
+    client.force_authenticate(user=user)
+
+    payload = {
+        'basic_details' : {
+            'password' : 'student',
+            "user_type" : "2",
+            "address" : "354",
+            "gender" : "Female",
+            "name" : "Khyati",
+            "username" : 123
+        },
+        "guardian" : "Sat Pal"
+    }
+    response = client.post(ENDPOINT,data=payload,format='json')
+    assert response.status_code == 400   
+
 
 @pytest.mark.django_db
 def test_update_student(client,user):
@@ -58,6 +95,21 @@ def test_update_student(client,user):
     response_data = response.json()
     assert response.status_code == 200
     assert response_data['message'] == 'Updated successfully' 
+
+
+@pytest.mark.django_db
+def test_update_student_missing_payload(client,user):
+    client.force_authenticate(user=user)
+    user_student = CustomUser.objects.create(username = 'student@gmail.com',password='student',user_type = '2')
+    student = Students.objects.create(basic_details = user_student, guardian = 'parent')
+    ENDPOINT = f'http://127.0.0.1:8000/api/update_student/{student.id}' 
+    payload = {
+       
+    }
+    response = client.put(ENDPOINT,data=payload,format = 'json')
+    response_data = response.json()
+    assert response.status_code == 400
+    
 
 
 @pytest.mark.django_db

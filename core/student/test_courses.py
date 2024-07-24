@@ -61,7 +61,6 @@ def test_create_course_student_invalid_input(client,user):
        "course_name" : 12
     }
     response = client.post(ENDPOINT,data=payload,format='json')
-    print(response.status_code)
     assert response.status_code == 400
 
 @pytest.mark.django_db
@@ -72,7 +71,6 @@ def test_create_course_student_empty(client,user):
       
     }
     response = client.post(ENDPOINT,data=payload,format='json')
-    print(response.status_code)
     assert response.status_code == 400    
 
 @pytest.mark.django_db
