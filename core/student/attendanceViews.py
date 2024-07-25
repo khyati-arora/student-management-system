@@ -41,7 +41,7 @@ def get_attendance_course(request, course_id):
 @permission_classes([IsAuthenticated])
 def get_attendance(request, course_id, student_id):
     try:
-        attendance = Attendance.objects.filter(course_id=course_id, student_id=student_id, status="Present")
+        attendance = Attendance.objects.filter(course_id=course_id, student_id=student_id)
         if attendance.exists():
             serializer = AttendanceGetSerializer(attendance, many=True)
         else:

@@ -93,18 +93,18 @@ def update_staff(request, staff_id):
         data = request.data
         flag = False
         if 'username' in data:
-            if not isinstance(data.get('username'), str):
-                return Response({'username': ['User name must be a string.']}, status=status.HTTP_400_BAD_REQUEST)
+            if not isinstance(data.get('username'), str) or data['username'] == custom_user.username :
+                return Response({'username': ['Invalid input provided']}, status=status.HTTP_400_BAD_REQUEST)
             custom_user.username = data['username']
             flag = True
         if 'address' in data:
-            if not isinstance(data.get('address'), str):
-                return Response({'address': ['Address must be a string.']}, status=status.HTTP_400_BAD_REQUEST)
+            if not isinstance(data.get('address'), str) or data['address'] == custom_user.address:
+                return Response({'address': ['Invalid input provided']}, status=status.HTTP_400_BAD_REQUEST)
             custom_user.address = data['address']
             flag = True
         if 'salary' in data:
-            if not isinstance(data.get('salary'), str):
-                return Response({'salary': ['Salary must be a string.']}, status=status.HTTP_400_BAD_REQUEST)
+            if not isinstance(data.get('salary'), str) or data['salary'] == staff.salary:
+                return Response({'salary': ['Invalid input provided']}, status=status.HTTP_400_BAD_REQUEST)
             staff.salary = data['salary']
             flag = True
 

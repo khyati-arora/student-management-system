@@ -1,6 +1,6 @@
 from django.urls import path
 from .staffViews import create_staff, staff_delete,staff_list,update_staff,staff_get
-from .studentViews import create_student,student_list,student_delete,update_student,student_get
+from .studentViews import create_student,student_list,student_delete,update_student,student_get,search_student
 from .courseViews import create_course,course_update,course_delete,get_courses,get_course
 from .resultViews import create_result,get_result,delete_result,update_result,get_result_id
 from .attendanceViews import create_attendance,get_attendance,delete_attendance,update_attendance,get_attendance_course
@@ -11,6 +11,7 @@ urlpatterns = [
     path('api/create_student', create_student),
     path('api/get_student',student_list),
     path('api/get_staff',staff_list),
+    path('api/get_student/<str:name>',search_student),
     path('api/delete_staff/<int:staff_id>',staff_delete),
     path('api/delete_student/<int:student_id>',student_delete),
     path('api/update_staff/<int:staff_id>',update_staff),

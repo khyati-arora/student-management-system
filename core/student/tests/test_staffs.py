@@ -44,6 +44,7 @@ def test_add_staff(client,user):
      response_data = response.json()
      assert response.status_code == 201
      assert response_data['course'] == course.id
+   
 
 @pytest.mark.django_db  
 def test_add_staff_missing_fields(client,user):
@@ -101,6 +102,21 @@ def test_update_staff(client,user):
     response_data = response.json()
     assert response.status_code == 200
     assert response_data['message'] == 'Updated successfully' 
+
+@pytest.mark.django_db  
+def test_update_staff_same_data(client,user):
+    client.force_authenticate(user=user)
+    course = Course.objects.create(course_name = "c")
+    user_staff = CustomUser.objects.create(username = 'staff@gmail.com',password='staff',user_type = '1')
+    staff = Staffs.objects.create(basic_details = user_staff, course = course)
+    course1 = Course.objects.create(course_name = "Jdk")
+    ENDPOINT = f'http://127.0.0.1:8000/api/update_staff/{staff.id}' 
+    payload = {
+        'username' : user_staff.username
+    }
+
+    response = client.put(ENDPOINT,data=payload,format = 'json')
+    assert response.status_code == 400 
 
 @pytest.mark.django_db  
 def test_update_staff_invalid(client,user):

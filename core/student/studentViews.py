@@ -94,14 +94,20 @@ def update_student(request, student_id):
         custom_user = student.basic_details
         data = request.data
         flag = False
-        if 'username' in data:
+        if 'username' in data :
+            if not isinstance(data.get('username'), str) or data['username'] == custom_user.username :
+                return Response({'username': ['Invalid input provided']}, status=status.HTTP_400_BAD_REQUEST)
             custom_user.username = data['username']
             flag = True
 
         if 'address' in data:
+            if not isinstance(data.get('address'), str) or data['address'] == custom_user.address:
+                return Response({'address': ['Invalid input provided']}, status=status.HTTP_400_BAD_REQUEST)
             custom_user.address = data['address']
             flag = True
         if 'guardian' in data:
+            if not isinstance(data.get('guardian'), str) or data['guardian'] == student.guardian:
+                return Response({'address': ['Invalid input provided']}, status=status.HTTP_400_BAD_REQUEST)
             student.guardian = data['guardian']
             flag = True
         
@@ -116,3 +122,18 @@ def update_student(request, student_id):
         return Response({'errors': e.detail}, status=status.HTTP_400_BAD_REQUEST)
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])    
+def search_student(request,name):
+    if name:
+        students = CustomUser.objects.filter(name__icontains=name,user_type = '2')
+        serializer = CustomUserSerializer(students, many=True)
+        return Response(serializer.data)
+    else:
+        return Response({'message' : 'No data found'}, status = status.HTTP_200_OK)
+    
+   
+    
+     
+
