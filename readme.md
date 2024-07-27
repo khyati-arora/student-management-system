@@ -66,12 +66,12 @@ python -m venv venv
 
 3. Installing required dependencies : 
 ```
+cd core
 pip install -r requirements.txt
 ```
 
 4. Configure database :
 ```
-cd core
 Create a .env file and set these properties according to your postgres database:
 
 DB_NAME = 'db name'
