@@ -20,7 +20,7 @@ services:
       - DB_PORT=5432
     networks:
       - mynetwork 
-        
+
   db:
     image: postgres:14
     volumes:
@@ -35,8 +35,5 @@ services:
     networks:
       - mynetwork 
 
-volumes:
-  postgres_data:
-  
 networks:
   mynetwork:  
