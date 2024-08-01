@@ -18,6 +18,9 @@ services:
       - DB_PASSWORD=mypassword
       - DB_HOST=db
       - DB_PORT=5432
+     networks:
+      -mynetwork
+
   db:
     image: postgres:14
     volumes:
@@ -28,7 +31,12 @@ services:
        - POSTGRES_PASSWORD=mypassword  
     ports:
        - "5433:5432"    
+    networks:
+       -mynetwork   
 
 volumes:
   postgres_data:
+
+networks:
+  mynetwork:  
   
