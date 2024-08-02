@@ -13,14 +13,15 @@ services:
     depends_on:
       - db
     environment:
+      - CREATE_SUPERUSER=true
+      - DJANGO_SUPERUSER_USERNAME=admin
+      - DJANGO_SUPERUSER_EMAIL=admin@example.com
+      - DJANGO_SUPERUSER_PASSWORD=adminpassword
       - DB_NAME=mydatabase
       - DB_USER=myuser
       - DB_PASSWORD=mypassword
       - DB_HOST=db
       - DB_PORT=5432
-    networks:
-      - mynetwork 
-
   db:
     image: postgres:14
     volumes:
@@ -32,8 +33,6 @@ services:
     ports:
        - "5433:5432"    
 
-    networks:
-      - mynetwork 
-
-networks:
-  mynetwork:  
+volumes:
+  postgres_data:
+  
